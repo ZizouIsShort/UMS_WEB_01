@@ -54,9 +54,8 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
         
         {/* Brand Logo */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleScrollTo("hero")}>
-          <span className="text-sm font-medium tracking-wider text-white uppercase">
-            UMS
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/Adobe Express - file.png" alt="UMS" className="h-8 w-auto" draggable={false} />
         </div>
 
         {/* Desktop Navigation links */}
