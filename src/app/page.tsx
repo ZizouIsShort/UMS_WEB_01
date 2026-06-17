@@ -6,16 +6,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import FloatingNavbar from "@/components/FloatingNavbar";
 import HorizontalScrollSection from "@/components/HorizontalScrollSection";
 import MarbleCarousel from "@/components/MarbleCarousel";
-import TradingSection from "@/components/TradingSection";
 import ContactSection from "@/components/ContactSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const navSections = [
-  { id: "projects", label: "Projects" },
-  { id: "products", label: "Products" },
-  { id: "trading", label: "Trading" },
-  { id: "contact", label: "Contact" },
+  { id: "projects", label: "Projects", type: "anchor" as const },
+  { id: "products", label: "Products", type: "anchor" as const },
+  { id: "contact", label: "Contact", type: "anchor" as const },
+  { id: "trading", label: "Trading", type: "page" as const, href: "/trading" },
 ];
 
 const siteImages = [
@@ -318,7 +317,6 @@ export default function Home() {
       {/* ===== MARBLE CAROUSEL ===== */}
       <MarbleCarousel id="products" />
 
-      <TradingSection />
       <ContactSection />
     </div>
   );

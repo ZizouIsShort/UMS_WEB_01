@@ -128,6 +128,18 @@ export default function TradingSection() {
     setSelectedIdx(next);
   }, []);
 
+  // Clear selection on scroll
+  useEffect(() => {
+    const onScroll = () => {
+      if (selectedRef.current !== null) {
+        selectedRef.current = null;
+        setSelectedIdx(null);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   useEffect(() => {
     const section = sectionRef.current;
     const container = containerRef.current;

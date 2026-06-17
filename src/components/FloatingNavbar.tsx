@@ -1,10 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
+
+interface NavSection {
+  id: string;
+  label: string;
+  type: "anchor" | "page";
+  href?: string;
+}
 
 interface NavbarProps {
-  sections: { id: string; label: string }[];
+  sections: NavSection[];
 }
 
 export default function FloatingNavbar({ sections }: NavbarProps) {
@@ -14,7 +21,7 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -60% 0px", // triggers when section is in the middle of viewport
+      rootMargin: "-20% 0px -60% 0px",
       threshold: 0.1,
     };
 
@@ -29,8 +36,10 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
     sections.forEach((section) => {
-      const el = document.getElementById(section.id);
-      if (el) observer.observe(el);
+      if (section.type === "anchor") {
+        const el = document.getElementById(section.id);
+        if (el) observer.observe(el);
+      }
     });
 
     return () => {
@@ -46,10 +55,17 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
     }
   };
 
+  const handleNavClick = (section: NavSection) => {
+    if (section.type === "page" && section.href) {
+      setMobileMenuOpen(false);
+      window.location.href = section.href;
+    } else {
+      handleScrollTo(section.id);
+    }
+  };
+
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6`}
-    >
+    <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 transition-all duration-300">
         
         {/* Brand Logo */}
@@ -63,14 +79,17 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
           {sections.map((section) => (
             <button
               key={section.id}
-              onClick={() => handleScrollTo(section.id)}
-              className={`text-xs font-medium uppercase tracking-wider transition-all duration-300 ${
-                activeSection === section.id
+              onClick={() => handleNavClick(section)}
+              className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider transition-all duration-300 ${
+                section.type === "anchor" && activeSection === section.id
                   ? "text-gold-300"
                   : "text-zinc-400 hover:text-white"
               }`}
             >
               {section.label}
+              {section.type === "page" && (
+                <ArrowUpRight className="w-3 h-3 -rotate-45" />
+              )}
             </button>
           ))}
         </div>
@@ -99,14 +118,17 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
           {sections.map((section) => (
             <button
               key={section.id}
-              onClick={() => handleScrollTo(section.id)}
-              className={`w-full text-left text-sm font-semibold uppercase tracking-widest transition-all ${
-                activeSection === section.id
+              onClick={() => handleNavClick(section)}
+              className={`w-full flex items-center justify-between text-left text-sm font-semibold uppercase tracking-widest transition-all ${
+                section.type === "anchor" && activeSection === section.id
                   ? "text-gold-300"
                   : "text-zinc-300 hover:text-white"
               }`}
             >
               {section.label}
+              {section.type === "page" && (
+                <ArrowUpRight className="w-3.5 h-3.5 -rotate-45 opacity-60" />
+              )}
             </button>
           ))}
         </div>
