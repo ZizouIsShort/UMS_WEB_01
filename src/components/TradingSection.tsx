@@ -284,7 +284,14 @@ export default function TradingSection() {
         <div
           ref={containerRef}
           className="relative flex items-center justify-center scale-50 sm:scale-75 lg:scale-100"
-          style={{ width: "1px", height: "1px", transformStyle: "preserve-3d" }}
+          style={{
+            width: "auto",
+            height: "auto",
+            transformStyle: "preserve-3d",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           {/* Deck shadow */}
           <div className="absolute w-36 h-52 rounded-xl bg-white/[0.04] blur-lg pointer-events-none" />

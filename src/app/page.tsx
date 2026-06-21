@@ -132,8 +132,13 @@ export default function Home() {
 
     const panels = track.querySelectorAll<HTMLElement>("[data-speed]");
     const isMobile = window.innerWidth < 768;
-    const totalScroll = track.scrollWidth - window.innerWidth;
+    let totalScroll = track.scrollWidth - window.innerWidth;
     if (totalScroll <= 0) return;
+
+    // On mobile without pinning, multiply scroll distance to give more time for animation
+    if (isMobile) {
+      totalScroll = totalScroll * 2;
+    }
 
     section.style.height = `${totalScroll + 1}px`;
 
