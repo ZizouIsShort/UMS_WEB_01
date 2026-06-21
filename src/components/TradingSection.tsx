@@ -357,7 +357,7 @@ export default function TradingSection() {
           style={{ transformStyle: "preserve-3d" }}
         >
           <div
-            className="relative flex items-center justify-center scale-[0.35] sm:scale-75 lg:scale-100"
+            className="relative flex items-center justify-center scale-100 lg:scale-100"
             style={{
               width: "1px",
               height: "1px",
