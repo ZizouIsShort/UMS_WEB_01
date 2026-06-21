@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -35,8 +35,7 @@ const marbleImages = [
   },
 ];
 
-const RADIUS = 320;
-const ANGLE_STEP = 360 / marbleImages.length;
+const DEFAULT_DIMENSIONS = { RADIUS: 320, CARD_W: 200, CARD_H: 280, HEIGHT: "200vh", PERSPECTIVE: "1200px" };
 
 interface MarbleCarouselProps {
   id?: string;
@@ -45,11 +44,23 @@ interface MarbleCarouselProps {
 export default function MarbleCarousel({ id }: MarbleCarouselProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const [dims, setDims] = useState(DEFAULT_DIMENSIONS);
+
+  // Calculate dimensions on client-side only after mount
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    const newDims = isMobile
+      ? { RADIUS: 150, CARD_W: 120, CARD_H: 170, HEIGHT: "150vh", PERSPECTIVE: "800px" }
+      : { RADIUS: 320, CARD_W: 200, CARD_H: 280, HEIGHT: "200vh", PERSPECTIVE: "1200px" };
+    setDims(newDims);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
     const ring = ringRef.current;
     if (!section || !ring) return;
+
+    const ANGLE_STEP = 360 / marbleImages.length;
 
     const ctx = gsap.context(() => {
       gsap.to(ring, {
@@ -58,7 +69,7 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=200%",
+          end: dims.HEIGHT === "150vh" ? "+=150%" : "+=200%",
           scrub: 1,
           invalidateOnRefresh: true,
         },
@@ -67,18 +78,20 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
 
     ScrollTrigger.refresh();
     return () => ctx.revert();
-  }, []);
+  }, [dims]);
+
+  const ANGLE_STEP = 360 / marbleImages.length;
 
   return (
     <section
       id={id}
       ref={sectionRef}
       className="relative bg-black"
-      style={{ height: "200vh" }}
+      style={{ height: dims.HEIGHT }}
     >
       <div
         className="sticky top-0 h-screen flex items-center justify-center overflow-hidden"
-        style={{ perspective: "1200px" }}
+        style={{ perspective: dims.PERSPECTIVE }}
       >
         <div className="absolute top-12 left-6 sm:left-10 z-20 pointer-events-none select-none mix-blend-difference">
           <div className="flex items-center space-x-2 mb-3">
@@ -97,23 +110,23 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
           className="relative"
           style={{
             width: "100px",
-            height: "300px",
+            height: `${dims.CARD_H}px`,
             transformStyle: "preserve-3d",
           }}
         >
           {marbleImages.map((item, i) => {
             const angle = i * ANGLE_STEP;
             const rad = (angle * Math.PI) / 180;
-            const x = Math.sin(rad) * RADIUS;
-            const z = -Math.cos(rad) * RADIUS;
+            const x = Math.sin(rad) * dims.RADIUS;
+            const z = -Math.cos(rad) * dims.RADIUS;
 
             return (
               <div
                 key={i}
                 className="absolute inset-0"
                 style={{
-                  width: "200px",
-                  height: "280px",
+                  width: `${dims.CARD_W}px`,
+                  height: `${dims.CARD_H}px`,
                   transform: `translateX(${x}px) translateZ(${z}px) rotateY(${-angle}deg)`,
                   backfaceVisibility: "hidden",
                 }}

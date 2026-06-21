@@ -131,6 +131,7 @@ export default function Home() {
     if (!section || !track) return;
 
     const panels = track.querySelectorAll<HTMLElement>("[data-speed]");
+    const isMobile = window.innerWidth < 768;
     const totalScroll = track.scrollWidth - window.innerWidth;
     if (totalScroll <= 0) return;
 
@@ -139,10 +140,10 @@ export default function Home() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        pin: true,
+        pin: !isMobile, // Disable pin on mobile for better UX
         start: "top top",
         end: () => `+=${totalScroll}`,
-        scrub: 1,
+        scrub: isMobile ? 0.5 : 1, // Faster response on mobile
         invalidateOnRefresh: true,
       },
       onUpdate: () => {
@@ -159,14 +160,16 @@ export default function Home() {
 
     panels.forEach((panel) => {
       const speed = parseFloat(panel.dataset.speed || "1");
+      // Disable parallax on mobile for performance
+      const parallaxAmount = isMobile ? 0 : (1 - speed) * totalScroll;
       gsap.to(panel, {
-        x: (1 - speed) * totalScroll,
+        x: parallaxAmount,
         ease: "none",
         scrollTrigger: {
           trigger: section,
           start: "top top",
           end: () => `+=${totalScroll}`,
-          scrub: 1,
+          scrub: isMobile ? 0.5 : 1,
           invalidateOnRefresh: true,
         },
       });
@@ -286,7 +289,7 @@ export default function Home() {
                 data-speed={item.speed}
                 className="relative flex-shrink-0"
                 style={{
-                  width: "clamp(200px, 22vw, 320px)",
+                  width: "clamp(120px, 35vw, 320px)",
                   aspectRatio: "3 / 4",
                   marginTop: `${item.yOffset}%`,
                 }}

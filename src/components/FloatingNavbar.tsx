@@ -66,10 +66,10 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 transition-all duration-300">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-4 transition-all duration-300">
         
         {/* Brand Logo */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleScrollTo("hero")}>
+        <div className="flex items-center gap-2 cursor-pointer touch-none" onClick={() => handleScrollTo("hero")}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/Adobe Express - file.png" alt="UMS" className="h-8 w-auto" draggable={false} />
         </div>
@@ -80,7 +80,7 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
             <button
               key={section.id}
               onClick={() => handleNavClick(section)}
-              className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider transition-all duration-300 ${
+              className={`flex items-center gap-1 text-xs font-medium uppercase tracking-wider transition-all duration-300 px-2 py-1 ${
                 section.type === "anchor" && activeSection === section.id
                   ? "text-gold-300"
                   : "text-zinc-400 hover:text-white"
@@ -98,7 +98,7 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
         <div className="flex md:hidden items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 text-zinc-400 hover:text-white transition-all"
+            className="p-2 text-zinc-400 hover:text-white transition-all active:scale-90 touch-none"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -108,21 +108,21 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`md:hidden fixed top-[68px] left-4 right-4 z-40 transition-all duration-500 origin-top ${
+        className={`md:hidden fixed top-[68px] left-4 right-4 z-40 transition-all duration-500 origin-top bg-black/95 rounded-lg border border-white/5 ${
           mobileMenuOpen
             ? "opacity-100 scale-100 pointer-events-auto"
             : "opacity-0 scale-95 pointer-events-none"
         }`}
       >
-        <div className="flex flex-col gap-4 p-5">
+        <div className="flex flex-col gap-2 p-4">
           {sections.map((section) => (
             <button
               key={section.id}
               onClick={() => handleNavClick(section)}
-              className={`w-full flex items-center justify-between text-left text-sm font-semibold uppercase tracking-widest transition-all ${
+              className={`w-full flex items-center justify-between text-left text-sm font-semibold uppercase tracking-widest transition-all px-4 py-3 rounded-lg active:bg-white/5 touch-none ${
                 section.type === "anchor" && activeSection === section.id
-                  ? "text-gold-300"
-                  : "text-zinc-300 hover:text-white"
+                  ? "text-gold-300 bg-gold-500/10"
+                  : "text-zinc-300 hover:text-white hover:bg-white/5"
               }`}
             >
               {section.label}

@@ -64,7 +64,6 @@ const tradingItems: TradingItem[] = [
   },
 ];
 
-const NUM_CARDS = 6;
 const CARD_W = 130;
 const CARD_H = 185;
 const FAN_ANGLE = 170;
@@ -78,10 +77,10 @@ interface CardLayout {
   fanRotY: number;
 }
 
-function buildLayouts(): CardLayout[] {
+function buildLayouts(numCards: number): CardLayout[] {
   const layouts: CardLayout[] = [];
-  for (let i = 0; i < NUM_CARDS; i++) {
-    const cardAngle = gsap.utils.interpolate(-FAN_ANGLE / 2, FAN_ANGLE / 2, i / (NUM_CARDS - 1));
+  for (let i = 0; i < numCards; i++) {
+    const cardAngle = gsap.utils.interpolate(-FAN_ANGLE / 2, FAN_ANGLE / 2, i / (numCards - 1));
     const rad = (cardAngle * Math.PI) / 180;
     layouts.push({
       fanX: FAN_RADIUS * Math.sin(rad),
@@ -97,7 +96,6 @@ export default function TradingSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef({ progress: 0 });
-  const layouts = useRef<CardLayout[]>(buildLayouts());
   const selectedRef = useRef<number | null>(null);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState(0);
@@ -107,11 +105,15 @@ export default function TradingSection() {
 
   const activeItem = tradingItems[activeTab];
   const images = activeItem.images;
-
-  const cardData: { src: string; label: string }[] = [];
-  for (let i = 0; i < NUM_CARDS; i++) {
-    cardData.push(images[i % images.length]);
+  const NUM_CARDS = Math.min(6, images.length); // Use actual image count, max 6
+  const layoutsRef = useRef<CardLayout[]>([]);
+  
+  // Keep layouts in sync with NUM_CARDS
+  if (layoutsRef.current.length !== NUM_CARDS) {
+    layoutsRef.current = buildLayouts(NUM_CARDS);
   }
+
+  const cardData: { src: string; label: string }[] = images.slice(0, NUM_CARDS);
 
   const handleCardClick = useCallback((idx: number) => {
     const next = selectedRef.current === idx ? null : idx;
@@ -138,7 +140,6 @@ export default function TradingSection() {
 
     const s = stateRef.current;
     s.progress = 0;
-    layouts.current = buildLayouts();
 
     const ctx = gsap.context(() => {
       gsap.to(s, {
@@ -155,10 +156,12 @@ export default function TradingSection() {
           const p = s.progress;
           const sel = selectedRef.current;
           const cards = container.querySelectorAll<HTMLDivElement>(".deal-card");
-          const lays = layouts.current;
+          const lays = layoutsRef.current;
           cards.forEach((card) => {
             const idx = parseInt(card.dataset.idx || "0", 10);
             const L = lays[idx];
+            
+            if (!L) return; // Guard against undefined layouts
 
             const dealDuration = 0.75 / NUM_CARDS;
             const dealStart = idx * dealDuration;
@@ -195,11 +198,10 @@ export default function TradingSection() {
 
     ScrollTrigger.refresh();
     return () => ctx.revert();
-  }, [animKey]);
+  }, [animKey, NUM_CARDS]);
 
   useEffect(() => {
     stateRef.current.progress = 0;
-    layouts.current = buildLayouts();
     selectedRef.current = null;
     setSelectedIdx(null);
     setAnimKey((k) => k + 1);
@@ -218,20 +220,27 @@ export default function TradingSection() {
     setActiveTab(i);
   }, []);
 
-  const handleScrubMouseDown = useCallback((e: React.MouseEvent) => {
+  const handleScrubMouseDown = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     isDragging.current = true;
-    handleScrubMove(e.clientX);
+    const clientX = "touches" in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+    handleScrubMove(clientX);
 
-    const onMouseMove = (ev: MouseEvent) => {
-      if (isDragging.current) handleScrubMove(ev.clientX);
+    const onMove = (ev: MouseEvent | TouchEvent) => {
+      if (!isDragging.current) return;
+      const cx = "touches" in ev ? ev.touches[0].clientX : (ev as MouseEvent).clientX;
+      handleScrubMove(cx);
     };
-    const onMouseUp = () => {
+    const onEnd = () => {
       isDragging.current = false;
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onEnd);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onEnd);
     };
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onEnd);
+    window.addEventListener("touchmove", onMove, { passive: true });
+    window.addEventListener("touchend", onEnd, { passive: true });
   }, []);
 
   const handleScrubMove = useCallback((clientX: number) => {
@@ -274,7 +283,7 @@ export default function TradingSection() {
         {/* Container */}
         <div
           ref={containerRef}
-          className="relative flex items-center justify-center"
+          className="relative flex items-center justify-center scale-50 sm:scale-75 lg:scale-100"
           style={{ width: "1px", height: "1px", transformStyle: "preserve-3d" }}
         >
           {/* Deck shadow */}
@@ -286,7 +295,11 @@ export default function TradingSection() {
               key={i}
               data-idx={i}
               onClick={() => handleCardClick(i)}
-              className="deal-card absolute rounded-xl overflow-hidden border border-white/10 shadow-xl shadow-black/50 transition-none cursor-pointer"
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                handleCardClick(i);
+              }}
+              className="deal-card absolute rounded-xl overflow-hidden border border-white/10 shadow-xl shadow-black/50 transition-none cursor-pointer active:scale-95"
               style={{
                 width: CARD_W,
                 height: CARD_H,
@@ -344,11 +357,12 @@ export default function TradingSection() {
         )}
 
         {/* Horizontal Scrubber */}
-        <div className="absolute bottom-10 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 w-[80%] max-w-[500px]">
+        <div className="absolute bottom-10 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 w-[80%] max-w-[500px] touch-pan-x">
           <div
             ref={scrubRef}
-            className="relative h-6 flex items-center cursor-pointer select-none"
+            className="relative h-8 sm:h-6 flex items-center cursor-pointer select-none"
             onMouseDown={handleScrubMouseDown}
+            onTouchStart={handleScrubMouseDown}
           >
             <div className="absolute left-0 right-0 h-[1px] bg-white/10" />
             <div
@@ -363,12 +377,17 @@ export default function TradingSection() {
                   className="absolute flex items-center justify-center"
                   style={{ left: `${pct * 100}%`, transform: "translateX(-50%)" }}
                 >
-                  <div
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleTabChange(i);
+                    }}
+                    className={`w-3 h-3 sm:w-2 sm:h-2 rounded-full transition-all duration-300 cursor-pointer active:scale-75 ${
                       i === activeTab
                         ? "bg-gold-400 shadow-lg shadow-gold-500/50 scale-150"
                         : "bg-white/20 hover:bg-white/40"
                     }`}
+                    aria-label={`Select ${item.short}`}
                   />
                 </div>
               );
@@ -383,11 +402,18 @@ export default function TradingSection() {
                   className="absolute top-0"
                   style={{ left: `${pct * 100}%`, transform: "translateX(-50%)" }}
                 >
-                  <span className={`text-[10px] font-medium tracking-wide whitespace-nowrap transition-all duration-300 ${
-                    i === activeTab ? "text-gold-300" : "text-zinc-500"
-                  }`}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleTabChange(i);
+                    }}
+                    className={`text-[10px] font-medium tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer active:scale-90 ${
+                      i === activeTab ? "text-gold-300" : "text-zinc-500 hover:text-zinc-300"
+                    }`}
+                    aria-label={`Select ${item.short}`}
+                  >
                     {item.short}
-                  </span>
+                  </button>
                 </div>
               );
             })}
