@@ -66,9 +66,9 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6">
-      <div className="max-w-7xl mx-auto flex items-center justify-center md:justify-between px-4 sm:px-6 py-4 transition-all duration-300">
+      <div className="max-w-7xl mx-auto flex items-center justify-center px-4 sm:px-6 py-4 transition-all duration-300">
         
-        {/* Desktop Navigation links */}
+        {/* Desktop Navigation links - centered */}
         <div className="hidden md:flex items-center gap-6">
           {sections.map((section) => (
             <button
