@@ -135,17 +135,12 @@ export default function Home() {
     let totalScroll = track.scrollWidth - window.innerWidth;
     if (totalScroll <= 0) return;
 
-    // On mobile without pinning, multiply scroll distance to give more time for animation
-    if (isMobile) {
-      totalScroll = totalScroll * 2;
-    }
-
     section.style.height = `${totalScroll + 1}px`;
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        pin: !isMobile, // Disable pin on mobile for better UX
+        pin: true, // Pin on all devices so it stays until animation completes
         start: "top top",
         end: () => `+=${totalScroll}`,
         scrub: isMobile ? 0.5 : 1, // Faster response on mobile
@@ -238,7 +233,6 @@ export default function Home() {
         id="projects"
         ref={sectionRef}
         className="relative overflow-hidden bg-black"
-        style={{ minHeight: "100vh" }}
       >
         <div className="sticky top-0 h-screen overflow-hidden">
           {/* Section editorial elements (visible only in this section) */}

@@ -280,64 +280,69 @@ export default function TradingSection() {
           </h2>
         </div>
 
-        {/* Container */}
+        {/* Container - properly constrained */}
         <div
           ref={containerRef}
-          className="relative flex items-center justify-center scale-50 sm:scale-75 lg:scale-100"
+          className="relative w-full h-full flex items-center justify-center"
           style={{
-            width: "auto",
-            height: "auto",
             transformStyle: "preserve-3d",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
           }}
         >
-          {/* Deck shadow */}
-          <div className="absolute w-36 h-52 rounded-xl bg-white/[0.04] blur-lg pointer-events-none" />
-
-          {/* Cards */}
-          {cardData.map((item, i) => (
-            <div
-              key={i}
-              data-idx={i}
-              onClick={() => handleCardClick(i)}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                handleCardClick(i);
-              }}
-              className="deal-card absolute rounded-xl overflow-hidden border border-white/10 shadow-xl shadow-black/50 transition-none cursor-pointer active:scale-95"
-              style={{
-                width: CARD_W,
-                height: CARD_H,
-                transform: `translateX(0px) translateY(0px) translateZ(${-i * STACK_OFFSET}px) scale(0.9)`,
-                willChange: "transform, filter",
-                filter: "brightness(0.6)",
-                zIndex: i,
-              }}
-            >
-              <img
-                src={item.src}
-                alt={item.label}
-                className="w-full h-full object-cover pointer-events-none"
-                draggable={false}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute bottom-2 left-2 right-2 text-[9px] font-serif tracking-wide uppercase text-white drop-shadow-lg pointer-events-none">
-                {item.label}
-              </div>
-            </div>
-          ))}
-
-          {/* Fan arc hint */}
+          {/* Inner container for scaling */}
           <div
-            className="absolute rounded-full border border-white/[0.03] pointer-events-none"
+            className="relative flex items-center justify-center scale-50 sm:scale-75 lg:scale-100"
             style={{
-              width: FAN_RADIUS * 2,
-              height: FAN_RADIUS * 2,
-              transform: "translateZ(0px)",
+              width: "1px",
+              height: "1px",
+              transformStyle: "preserve-3d",
             }}
-          />
+          >
+            {/* Deck shadow */}
+            <div className="absolute w-36 h-52 rounded-xl bg-white/[0.04] blur-lg pointer-events-none" />
+
+            {/* Cards */}
+            {cardData.map((item, i) => (
+              <div
+                key={i}
+                data-idx={i}
+                onClick={() => handleCardClick(i)}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  handleCardClick(i);
+                }}
+                className="deal-card absolute rounded-xl overflow-hidden border border-white/10 shadow-xl shadow-black/50 transition-none cursor-pointer active:scale-95"
+                style={{
+                  width: CARD_W,
+                  height: CARD_H,
+                  transform: `translateX(0px) translateY(0px) translateZ(${-i * STACK_OFFSET}px) scale(0.9)`,
+                  willChange: "transform, filter",
+                  filter: "brightness(0.6)",
+                  zIndex: i,
+                }}
+              >
+                <img
+                  src={item.src}
+                  alt={item.label}
+                  className="w-full h-full object-cover pointer-events-none"
+                  draggable={false}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-2 left-2 right-2 text-[9px] font-serif tracking-wide uppercase text-white drop-shadow-lg pointer-events-none">
+                  {item.label}
+                </div>
+              </div>
+            ))}
+
+            {/* Fan arc hint */}
+            <div
+              className="absolute rounded-full border border-white/[0.03] pointer-events-none"
+              style={{
+                width: FAN_RADIUS * 2,
+                height: FAN_RADIUS * 2,
+                transform: "translateZ(0px)",
+              }}
+            />
+          </div>
         </div>
 
         {/* Detail Panel */}
