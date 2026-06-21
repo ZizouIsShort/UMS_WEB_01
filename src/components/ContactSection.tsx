@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Phone, MapPin, Clock } from "lucide-react";
+import { Phone, MapPin, Mail } from "lucide-react";
 
 export default function ContactSection() {
 
@@ -20,34 +20,41 @@ export default function ContactSection() {
           </h2>
 
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-6 sm:gap-8">
-            <div className="flex gap-3 flex-1 min-w-[200px] max-w-[320px] touch-none">
+            <div className="flex gap-3 flex-1 min-w-[200px] max-w-[340px] touch-none">
               <div className="p-2.5 rounded-lg bg-gold-500/10 text-gold-400 shrink-0 h-fit mt-0.5">
                 <MapPin className="w-4 h-4" />
               </div>
               <div className="text-left">
                 <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-mono mb-1">Corporate HQ</p>
-                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">Suite 402, Al-Riyadah Building, Street 4, Ghala Industrial District, Muscat, Sultanate of Oman</p>
+                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">
+                  United Modern Stone SPC<br />
+                  P.O. BOX:-2, POSTAL CODE:-130,<br />
+                  AZAIBA - MUSCAT,<br />
+                  SULTANATE OF OMAN
+                </p>
               </div>
             </div>
 
-            <div className="flex gap-3 flex-1 min-w-[200px] max-w-[320px] touch-none">
+            <div className="flex gap-3 flex-1 min-w-[200px] max-w-[340px] touch-none">
+              <div className="p-2.5 rounded-lg bg-gold-500/10 text-gold-400 shrink-0 h-fit mt-0.5">
+                <Mail className="w-4 h-4" />
+              </div>
+              <div className="text-left">
+                <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-mono mb-1">Email</p>
+                <a href="mailto:vikas@unitedmodernstone.com" className="text-zinc-300 text-xs sm:text-sm hover:text-gold-300 block mb-0.5 active:scale-95 transition-transform">vikas@unitedmodernstone.com</a>
+                <a href="mailto:mrityunjay@unitedmodernstone.com" className="text-zinc-300 text-xs sm:text-sm hover:text-gold-300 block mb-0.5 active:scale-95 transition-transform">mrityunjay@unitedmodernstone.com</a>
+                <a href="mailto:ansarsolkar@unitedmodernstone.com" className="text-zinc-300 text-xs sm:text-sm hover:text-gold-300 block active:scale-95 transition-transform">ansarsolkar@unitedmodernstone.com</a>
+              </div>
+            </div>
+
+            <div className="flex gap-3 flex-1 min-w-[200px] max-w-[340px] touch-none">
               <div className="p-2.5 rounded-lg bg-gold-500/10 text-gold-400 shrink-0 h-fit mt-0.5">
                 <Phone className="w-4 h-4" />
               </div>
               <div className="text-left">
-                <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-mono mb-1">Direct Lines</p>
-                <a href="tel:+96824490000" className="text-zinc-300 text-xs sm:text-sm hover:text-gold-300 block mb-0.5 active:scale-95 transition-transform">+968 2449 0000</a>
-                <a href="mailto:info@unitedmodernstone.com" className="text-zinc-300 text-xs sm:text-sm hover:text-gold-300 block active:scale-95 transition-transform">info@unitedmodernstone.com</a>
-              </div>
-            </div>
-
-            <div className="flex gap-3 flex-1 min-w-[200px] max-w-[320px] touch-none">
-              <div className="p-2.5 rounded-lg bg-gold-500/10 text-gold-400 shrink-0 h-fit mt-0.5">
-                <Clock className="w-4 h-4" />
-              </div>
-              <div className="text-left">
-                <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-mono mb-1">Availability</p>
-                <p className="text-zinc-300 text-xs sm:text-sm">Sunday – Thursday:<br />8:00 AM – 5:00 PM<br />Fri &amp; Sat: Closed</p>
+                <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-mono mb-1">Phone</p>
+                <a href="tel:+96894525641" className="text-zinc-300 text-xs sm:text-sm hover:text-gold-300 block mb-0.5 active:scale-95 transition-transform">+968 9452 5641</a>
+                <a href="tel:+96879050922" className="text-zinc-300 text-xs sm:text-sm hover:text-gold-300 block active:scale-95 transition-transform">+968 7905 0922</a>
               </div>
             </div>
           </div>
