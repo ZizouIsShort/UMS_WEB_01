@@ -14,61 +14,52 @@ interface TradingItem {
 
 const tradingItems: TradingItem[] = [
   {
-    label: "Building Materials Trading",
-    short: "Materials",
+    label: "Interior Finishing",
+    short: "Interior",
     images: [
-      { src: "/images/haitam-city.jpg", label: "Construction Materials" },
-      { src: "/images/crowne-plaza-muscat-9874249701-original.jfif", label: "Facade Cladding" },
+      { src: "/images/interior_carpet.png", label: "Carpet Flooring" },
+      { src: "/images/interior_parquetflooring.png", label: "Parquet Flooring" },
+      { src: "/images/interior_pvcflooring.png", label: "PVC Flooring" },
+      { src: "/images/interior_raisedfloor.png", label: "Raised Floor" },
+      { src: "/images/interior_wallcovering.png", label: "Wall Covering" },
     ],
   },
   {
-    label: "Supply of all kinds of Marble",
-    short: "Marble",
+    label: "General & Civil Works",
+    short: "Civil Works",
     images: [
-      { src: "/images/Golden_Calacatta_Large_Format_Tile_ottmo_x700.webp", label: "Golden Calacatta" },
-      { src: "/images/Oman-Beige-Marble.jpg", label: "Oman Beige" },
-      { src: "/images/Oman-Muscat-Sultan-Qaboos-Grand-Mosque-interior-lg.jpg", label: "Grand Mosque Marble" },
+      { src: "/images/civil_bindingwire.png", label: "Binding Wire" },
+      { src: "/images/civil_ironmongeryandhardware.png", label: "Ironmongery & Hardware" },
+      { src: "/images/civil_marbleandgranite.png", label: "Marble & Granite" },
+      { src: "/images/civil_ppe.png", label: "PPE & Safety" },
+      { src: "/images/civil_scaffoldingandframework.png", label: "Scaffolding & Framework" },
+      { src: "/images/civil_shutplywoodandtimber.png", label: "Shuttering & Timber" },
+      { src: "/images/civil_tileglue.png", label: "Tile Glue & Adhesives" },
+      { src: "/images/civil_tiles.png", label: "Ceramic & Porcelain Tiles" },
     ],
   },
   {
-    label: "Supply of all kinds of Granite",
-    short: "Granite",
+    label: "MEP Supplies",
+    short: "MEP",
     images: [
-      { src: "/images/obsidian-gold-elegance-stockcake.webp", label: "Obsidian Gold" },
-      { src: "/images/Golden_Calacatta_Large_Format_Tile_ottmo_x700.webp", label: "Polished Granite" },
+      { src: "/images/mep_cablemanagement.png", label: "Cable Management" },
+      { src: "/images/mep_dgset.png", label: "DG Set" },
+      { src: "/images/mep_erwpipes.png", label: "ERW Pipes" },
+      { src: "/images/mep_insulation.png", label: "Insulation Materials" },
+      { src: "/images/mep_pipesupportandhangers.png", label: "Pipe Support & Hangers" },
+      { src: "/images/mep_pvcpipes.png", label: "PVC Pipes & Fittings" },
+      { src: "/images/mep_sanitaryware.png", label: "Sanitaryware" },
     ],
   },
   {
-    label: "Supply of Natural Stone",
-    short: "Natural Stone",
+    label: "Road & Infrastructure",
+    short: "Road & Infra",
     images: [
-      { src: "/images/Oman-Beige-Marble.jpg", label: "Limestone" },
-      { src: "/images/amazing-royal-opera-house.jpg", label: "Sandstone" },
-    ],
-  },
-  {
-    label: "Supply & Installation of Countertop",
-    short: "Countertop",
-    images: [
-      { src: "/images/kempinski.webp", label: "Luxury Countertop" },
-      { src: "/images/Golden_Calacatta_Large_Format_Tile_ottmo_x700.webp", label: "Marble Countertop" },
-    ],
-  },
-  {
-    label: "Building & Construction Contracting",
-    short: "Contracting",
-    images: [
-      { src: "/images/crowne-plaza-muscat-9874249701-original.jfif", label: "Hotel Construction" },
-      { src: "/images/haitam-city.jpg", label: "Urban Development" },
-      { src: "/images/amazing-royal-opera-house.jpg", label: "Landmark Projects" },
-    ],
-  },
-  {
-    label: "Logistics Services",
-    short: "Logistics",
-    images: [
-      { src: "/images/Oman-botanic-garden-.jpg", label: "Material Transport" },
-      { src: "/images/haitam-city.jpg", label: "Supply Chain" },
+      { src: "/images/road_cornerguard.webp", label: "Corner Guard" },
+      { src: "/images/road_gatebarrier.jfif", label: "Gate Barrier" },
+      { src: "/images/road_hdgguardrail.jfif", label: "HDG Guardrail" },
+      { src: "/images/road_manholecover.jpg", label: "Manhole Cover" },
+      { src: "/images/road_wheelstoppers.jpg", label: "Wheel Stoppers" },
     ],
   },
 ];
@@ -213,6 +204,15 @@ export default function TradingSection() {
     setSelectedIdx(null);
     setAnimKey((k) => k + 1);
   }, [activeTab]);
+
+  useEffect(() => {
+    // Reset scroll after animation state is ready (when animKey changes)
+    const section = sectionRef.current;
+    if (section && animKey > 0) {
+      const sectionTop = section.offsetTop;
+      window.scrollTo({ top: sectionTop, behavior: "smooth" });
+    }
+  }, [animKey]);
 
   const handleTabChange = useCallback((i: number) => {
     setActiveTab(i);
