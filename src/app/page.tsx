@@ -135,15 +135,16 @@ export default function Home() {
     let totalScroll = track.scrollWidth - window.innerWidth;
     if (totalScroll <= 0) return;
 
-    section.style.height = `${totalScroll + 1}px`;
+    // Let content height (100vh from sticky div) determine section height — no inline override
+    const endStr = () => `+=${totalScroll}`;
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        pin: true, // Pin on all devices so it stays until animation completes
+        pin: true,
         start: "top top",
-        end: () => `+=${totalScroll}`,
-        scrub: isMobile ? 0.5 : 1, // Faster response on mobile
+        end: endStr,
+        scrub: isMobile ? 0.5 : 1,
         invalidateOnRefresh: true,
       },
       onUpdate: () => {
@@ -160,7 +161,6 @@ export default function Home() {
 
     panels.forEach((panel) => {
       const speed = parseFloat(panel.dataset.speed || "1");
-      // Disable parallax on mobile for performance
       const parallaxAmount = isMobile ? 0 : (1 - speed) * totalScroll;
       gsap.to(panel, {
         x: parallaxAmount,
@@ -168,7 +168,7 @@ export default function Home() {
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: () => `+=${totalScroll}`,
+          end: endStr,
           scrub: isMobile ? 0.5 : 1,
           invalidateOnRefresh: true,
         },
@@ -235,7 +235,6 @@ export default function Home() {
         className="relative overflow-hidden bg-black"
       >
         <div className="sticky top-0 h-screen overflow-hidden">
-          {/* Section editorial elements (visible only in this section) */}
           <div className="absolute top-12 left-6 sm:left-10 z-10 pointer-events-none select-none mix-blend-difference">
             <div className="flex items-center space-x-2 mb-3">
               <span className="w-6 h-[1px] bg-gold-500" />
@@ -248,7 +247,6 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* 18+ Projects — Left side */}
           <div className="absolute top-[30%] left-6 sm:left-12 z-10 pointer-events-none select-none mix-blend-difference text-left">
             <div className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[0.9] tracking-tight text-white whitespace-nowrap">
               {counts[0]}
@@ -259,7 +257,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 20+ Products — Right side, lower */}
           <div className="absolute bottom-[25%] right-6 sm:right-12 z-10 pointer-events-none select-none mix-blend-difference text-right">
             <div className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[0.9] tracking-tight text-white whitespace-nowrap">
               {counts[1]}
@@ -276,7 +273,6 @@ export default function Home() {
             </span>
           </div>
 
-          {/* Track */}
           <div
             ref={trackRef}
             className="flex items-center gap-6 sm:gap-10 px-6 sm:px-10"

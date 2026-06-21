@@ -463,48 +463,36 @@ export default function TradingSection() {
               className="absolute left-0 h-[1px] bg-gold-500/60 transition-all duration-300"
               style={{ width: `${(activeTab / (tradingItems.length - 1)) * 100}%` }}
             />
-            {tradingItems.map((item, i) => {
-              const pct = i / (tradingItems.length - 1);
-              return (
-                <div
+            <div className="flex justify-between w-full px-0">
+              {tradingItems.map((item, i) => (
+                <button
                   key={i}
-                  className="absolute flex items-center justify-center"
-                  style={{ left: `${pct * 100}%`, transform: "translateX(-50%)" }}
-                >
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleTabChange(i); }}
-                    className={`w-3 h-3 sm:w-2 sm:h-2 rounded-full transition-all duration-300 cursor-pointer active:scale-75 ${
-                      i === activeTab
-                        ? "bg-gold-400 shadow-lg shadow-gold-500/50 scale-150"
-                        : "bg-white/20 hover:bg-white/40"
-                    }`}
-                    aria-label={`Select ${item.short}`}
-                  />
-                </div>
-              );
-            })}
+                  onClick={(e) => { e.stopPropagation(); handleTabChange(i); }}
+                  className={`w-3 h-3 sm:w-2 sm:h-2 rounded-full transition-all duration-300 cursor-pointer active:scale-75 ${
+                    i === activeTab
+                      ? "bg-gold-400 shadow-lg shadow-gold-500/50 scale-150"
+                      : "bg-white/20 hover:bg-white/40"
+                  }`}
+                  aria-label={`Select ${item.short}`}
+                />
+              ))}
+            </div>
           </div>
-          <div className="relative mt-3 h-6">
-            {tradingItems.map((item, i) => {
-              const pct = i / (tradingItems.length - 1);
-              return (
-                <div
+          <div className="mt-3 h-6">
+            <div className="flex justify-between w-full">
+              {tradingItems.map((item, i) => (
+                <button
                   key={i}
-                  className="absolute top-0"
-                  style={{ left: `${pct * 100}%`, transform: "translateX(-50%)" }}
+                  onClick={(e) => { e.stopPropagation(); handleTabChange(i); }}
+                  className={`text-[9px] sm:text-[10px] font-medium tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer active:scale-90 ${
+                    i === activeTab ? "text-gold-300" : "text-zinc-500 hover:text-zinc-300"
+                  }`}
+                  aria-label={`Select ${item.short}`}
                 >
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleTabChange(i); }}
-                    className={`text-[10px] font-medium tracking-wide whitespace-nowrap transition-all duration-300 cursor-pointer active:scale-90 ${
-                      i === activeTab ? "text-gold-300" : "text-zinc-500 hover:text-zinc-300"
-                    }`}
-                    aria-label={`Select ${item.short}`}
-                  >
-                    {item.short}
-                  </button>
-                </div>
-              );
-            })}
+                  {item.short}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
