@@ -12,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const navSections = [
   { id: "projects", label: "Projects", type: "anchor" as const },
+  { id: "about", label: "About", type: "anchor" as const },
   { id: "products", label: "Products", type: "anchor" as const },
   { id: "contact", label: "Contact", type: "anchor" as const },
   { id: "trading", label: "Trading", type: "page" as const, href: "/trading" },
@@ -130,6 +131,8 @@ export default function Home() {
   const timersRef = useRef<ReturnType<typeof setInterval>[]>([]);
   const [selectedProject, setSelectedProject] = useState<SiteImage | null>(null);
   const [galleryIdx, setGalleryIdx] = useState(0);
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const [aboutVisible, setAboutVisible] = useState(false);
 
   const animateCounts = useCallback(() => {
     timersRef.current.forEach(clearInterval);
@@ -254,6 +257,22 @@ export default function Home() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [selectedProject]);
+
+  // Fade-up animation for About section
+  useEffect(() => {
+    const el = aboutRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setAboutVisible(true);
+        }
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -397,6 +416,87 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== ABOUT US ===== */}
+      <section
+        id="about"
+        ref={aboutRef}
+        className="relative py-16 sm:py-20 px-6 sm:px-10 bg-black"
+      >
+        <div
+          className={`max-w-6xl mx-auto transition-all duration-700 ${
+            aboutVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          {/* Heading */}
+          <div className="mb-8 sm:mb-10">
+            <div className="flex items-center space-x-2 mb-3">
+              <span className="w-6 h-[1px] bg-gold-500" />
+              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold-400">About</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-[0.9] tracking-tighter text-white mb-3">
+              Oman&apos;s Architectural
+              <br />
+              Cornerstone
+            </h2>
+            <div className="flex items-center space-x-3">
+              <span className="text-gold-400 text-xs font-mono tracking-[0.15em]">Engineering Grandeur</span>
+              <span className="w-px h-3 bg-zinc-600" />
+              <span className="text-zinc-500 text-xs font-mono tracking-[0.15em]">Since 2020</span>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="max-w-4xl mb-10 sm:mb-14">
+            <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
+              Based in the prestigious Azaiba district of Muscat, United Modern Stone SPC provides integrated civil-engineering grade solutions — supply, diamond processing, water-jet carving, wall cladding, and interior flooring systems across Oman. With an elite workforce of over 66 specialist masons, CNC developers, and civil draftsmen, we deliver structural materials that satisfy global health, safety, and acoustic standards with sub-millimeter installation accuracy.
+            </p>
+          </div>
+
+          {/* Values Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div className="border border-white/5 bg-white/[0.02] rounded-lg p-5 sm:p-6 hover:bg-white/[0.04] transition-colors duration-500">
+              <div className="w-8 h-px bg-gold-500 mb-4" />
+              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-white mb-2">
+                Engineering Excellence
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                Every slab goes through digital vein mapping and sonar inspection interfaces matching architects&apos; blueprints exactly.
+              </p>
+            </div>
+
+            <div className="border border-white/5 bg-white/[0.02] rounded-lg p-5 sm:p-6 hover:bg-white/[0.04] transition-colors duration-500">
+              <div className="w-8 h-px bg-gold-500 mb-4" />
+              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-white mb-2">
+                Absolute Quality Assurance
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                Wet-controlled, climate-guarded cutting rooms avoid trace physical fissures. We guarantee lifetime safety standard controls.
+              </p>
+            </div>
+
+            <div className="border border-white/5 bg-white/[0.02] rounded-lg p-5 sm:p-6 hover:bg-white/[0.04] transition-colors duration-500">
+              <div className="w-8 h-px bg-gold-500 mb-4" />
+              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-white mb-2">
+                Grand Vision
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                To supply timeless materials from Oman&apos;s rich mountain blocks and global quarries to the finest structures of the modern world.
+              </p>
+            </div>
+
+            <div className="border border-white/5 bg-white/[0.02] rounded-lg p-5 sm:p-6 hover:bg-white/[0.04] transition-colors duration-500">
+              <div className="w-8 h-px bg-gold-500 mb-4" />
+              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-white mb-2">
+                Our Mission
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                Integrating physical structural diagnostics, raw diamond sawing precision, and on-site engineering safety parameters to supply reliable architectural facades.
+              </p>
+            </div>
           </div>
         </div>
       </section>
