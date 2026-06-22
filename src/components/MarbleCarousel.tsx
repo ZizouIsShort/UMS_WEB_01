@@ -6,34 +6,28 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const marbleImages = [
-  {
-    src: "/images/Golden_Calacatta_Large_Format_Tile_ottmo_x700.webp",
-    name: "Golden Calacatta",
-  },
-  {
-    src: "/images/obsidian-gold-elegance-stockcake.webp",
-    name: "Obsidian Gold",
-  },
-  { src: "/images/Oman-Beige-Marble.jpg", name: "Oman Beige" },
-  {
-    src: "/images/Golden_Calacatta_Large_Format_Tile_ottmo_x700.webp",
-    name: "Golden Calacatta",
-  },
-  {
-    src: "/images/obsidian-gold-elegance-stockcake.webp",
-    name: "Obsidian Gold",
-  },
-  { src: "/images/Oman-Beige-Marble.jpg", name: "Oman Beige" },
-  {
-    src: "/images/Golden_Calacatta_Large_Format_Tile_ottmo_x700.webp",
-    name: "Golden Calacatta",
-  },
-  {
-    src: "/images/obsidian-gold-elegance-stockcake.webp",
-    name: "Obsidian Gold",
-  },
+interface MarbleItem {
+  src: string;
+  name: string;
+  category: "marble" | "granite";
+}
+
+const allItems: MarbleItem[] = [
+  { src: "/images/Golden_Calacatta_Large_Format_Tile_ottmo_x700.webp", name: "Golden Calacatta", category: "marble" },
+  { src: "/images/obsidian-gold-elegance-stockcake.webp", name: "Obsidian Gold", category: "marble" },
+  { src: "/images/Oman-Beige-Marble.jpg", name: "Oman Beige", category: "marble" },
+  { src: "/images/marble_desertRoseOman.png", name: "Desert Rose Oman", category: "marble" },
+  { src: "/images/marble_diamondWhite.png", name: "Diamond White", category: "marble" },
+  { src: "/images/marble_omaniBeige.png", name: "Omani Beige", category: "marble" },
+  { src: "/images/marble_omaniPink.png", name: "Omani Pink", category: "marble" },
+  { src: "/images/granite_bluePerl.png", name: "Blue Pearl", category: "granite" },
+  { src: "/images/granite_crystalYellow.png", name: "Crystal Yellow", category: "granite" },
+  { src: "/images/granite_indianBlackAbsolute.png", name: "Indian Black Absolute", category: "granite" },
+  { src: "/images/granite_indianBlackGalaxy.png", name: "Indian Black Galaxy", category: "granite" },
+  { src: "/images/granite_indianBlackPearl.png", name: "Indian Black Pearl", category: "granite" },
 ];
+
+type Category = "marble" | "granite";
 
 const DEFAULT_DIMENSIONS = { RADIUS: 320, CARD_W: 200, CARD_H: 280, HEIGHT: "200vh", PERSPECTIVE: "1200px" };
 
@@ -45,6 +39,9 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState(DEFAULT_DIMENSIONS);
+  const [activeCategory, setActiveCategory] = useState<Category>("marble");
+
+  const filteredItems = allItems.filter((m) => m.category === activeCategory);
 
   // Calculate dimensions on client-side only after mount
   useEffect(() => {
@@ -59,8 +56,6 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
     const section = sectionRef.current;
     const ring = ringRef.current;
     if (!section || !ring) return;
-
-    const ANGLE_STEP = 360 / marbleImages.length;
 
     const ctx = gsap.context(() => {
       gsap.to(ring, {
@@ -80,7 +75,7 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
     return () => ctx.revert();
   }, [dims]);
 
-  const ANGLE_STEP = 360 / marbleImages.length;
+  const ANGLE_STEP = 360 / filteredItems.length;
 
   return (
     <section
@@ -93,16 +88,42 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
         className="sticky top-0 h-screen flex items-center justify-center overflow-hidden"
         style={{ perspective: dims.PERSPECTIVE }}
       >
-        <div className="absolute top-12 left-6 sm:left-10 z-20 pointer-events-none select-none mix-blend-difference">
+        <div className="absolute top-12 left-6 sm:left-10 z-20 select-none mix-blend-difference">
           <div className="flex items-center space-x-2 mb-3">
             <span className="w-6 h-[1px] bg-gold-500" />
-            <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold-400">Premium Marble</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold-400">
+              Premium {activeCategory === "marble" ? "Marble" : "Granite"}
+            </span>
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-[0.9] tracking-tighter text-white whitespace-nowrap">
-            MARBLE
+            {activeCategory === "marble" ? "MARBLE" : "GRANITE"}
             <br />
             COLLECTION
           </h2>
+
+          {/* Category switcher */}
+          <div className="flex gap-2 mt-6 pointer-events-auto">
+            <button
+              onClick={() => setActiveCategory("marble")}
+              className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] rounded-full border transition-colors ${
+                activeCategory === "marble"
+                  ? "bg-gold-500/20 border-gold-500 text-gold-300"
+                  : "border-white/20 text-white/50 hover:border-white/40 hover:text-white/70"
+              }`}
+            >
+              Marble
+            </button>
+            <button
+              onClick={() => setActiveCategory("granite")}
+              className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] rounded-full border transition-colors ${
+                activeCategory === "granite"
+                  ? "bg-gold-500/20 border-gold-500 text-gold-300"
+                  : "border-white/20 text-white/50 hover:border-white/40 hover:text-white/70"
+              }`}
+            >
+              Granite
+            </button>
+          </div>
         </div>
 
         <div
@@ -114,7 +135,7 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
             transformStyle: "preserve-3d",
           }}
         >
-          {marbleImages.map((item, i) => {
+          {filteredItems.map((item, i) => {
             const angle = i * ANGLE_STEP;
             const rad = (angle * Math.PI) / 180;
             const x = Math.sin(rad) * dims.RADIUS;
@@ -122,7 +143,7 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
 
             return (
               <div
-                key={i}
+                key={`${activeCategory}-${i}`}
                 className="absolute inset-0"
                 style={{
                   width: `${dims.CARD_W}px`,
