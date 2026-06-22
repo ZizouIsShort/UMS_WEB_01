@@ -327,6 +327,9 @@ export default function Home() {
               <br />
               COLLECTION
             </h2>
+            <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-white/50 mt-3 whitespace-nowrap">
+              Click the images to view our work
+            </p>
           </div>
 
           <div className="absolute top-[30%] left-6 sm:left-12 z-10 pointer-events-none select-none mix-blend-difference text-left">
