@@ -18,33 +18,30 @@ export default function FloatingNavbar({ sections }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Track active section via scroll position (handles GSAP-pinned sections correctly)
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "-20% 0px -60% 0px",
-      threshold: 0.1,
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
+    const handleScroll = () => {
+      let current = "";
+      // Check last section first so the deepest visible one wins
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const s = sections[i];
+        if (s.type !== "anchor") continue;
+        const el = document.getElementById(s.id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        // Active when the element's top is in the upper half of the viewport
+        // and its bottom is still on screen (handles GSAP pinning correctly)
+        if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 0) {
+          current = s.id;
+          break;
         }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    sections.forEach((section) => {
-      if (section.type === "anchor") {
-        const el = document.getElementById(section.id);
-        if (el) observer.observe(el);
       }
-    });
-
-    return () => {
-      observer.disconnect();
+      setActiveSection(current);
     };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [sections]);
 
   const handleScrollTo = (id: string) => {

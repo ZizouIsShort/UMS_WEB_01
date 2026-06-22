@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "United Modern Stone SPC | Luxury Marble & Natural Stone Muscat",
   description: "United Modern Stone SPC is Oman's premier masonry contractor and marble supplier, delivering exquisite craftsmanship, landmark elevations, and bespoke stone selections in Muscat.",
   keywords: "United Modern Stone, UMS, Marble Oman, Natural Stone Muscat, Royal Court Oman, Luxury Stone, Calacatta Gold, Oman Beige, Marble Supplier Oman",
+  icons: [{ rel: "icon", url: "/images/Adobe Express - file.png" }],
 };
 
 export default function RootLayout({

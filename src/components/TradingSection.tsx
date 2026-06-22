@@ -196,13 +196,11 @@ export default function TradingSection() {
         const scale = 0.9 + 0.1 * eased;
         const brightness = 0.6 + 0.4 * eased;
 
-        const extraZ = isSel && isFullyDealt ? 180 : 0;
-        const extraScale = isSel && isFullyDealt ? 0.25 : 0;
         const dimOthers = sel !== null && !isSel ? 0.25 : 0;
 
-        card.style.transform = `translateX(${x.toFixed(1)}px) translateY(${-lift.toFixed(1)}px) translateZ(${(z + extraZ).toFixed(1)}px) rotateX(${(-tilt).toFixed(1)}deg) rotateY(${rotY.toFixed(1)}deg) scale(${(scale + extraScale).toFixed(3)})`;
+        card.style.transform = `translateX(${x.toFixed(1)}px) translateY(${-lift.toFixed(1)}px) translateZ(${z.toFixed(1)}px) rotateX(${(-tilt).toFixed(1)}deg) rotateY(${rotY.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
         card.style.filter = `brightness(${(brightness - dimOthers).toFixed(2)})`;
-        card.style.zIndex = String(isSel && isFullyDealt ? 100 : idx);
+        card.style.zIndex = String(idx);
       });
     };
 
@@ -280,7 +278,7 @@ export default function TradingSection() {
     }
   }, [activeTab, handleTabChange]);
 
-  const doCarouselRotate = useCallback((delta: number) => {
+  const doCarouselRotate = useCallback((delta: number, onComplete?: () => void) => {
     const newOffset = ((targetOffsetRef.current + delta) % NUM_CARDS + NUM_CARDS) % NUM_CARDS;
     targetOffsetRef.current = newOffset;
 
@@ -290,17 +288,19 @@ export default function TradingSection() {
       duration: 0.45,
       ease: "power2.inOut",
       onUpdate: () => updateCardsRef.current(),
+      onComplete: onComplete,
     });
   }, [NUM_CARDS]);
 
   const handleArrowClick = useCallback((dir: "left" | "right") => {
     const delta = dir === "right" ? 1 : -1;
+    const wasSelected = selectedRef.current;
 
-    // Deselect any open card info before rotating
-    if (selectedRef.current !== null) {
-      selectedRef.current = null;
-      setSelectedIdx(null);
-    }
+    const onRotationComplete = wasSelected !== null ? () => {
+      const newSelected = ((wasSelected - delta) % NUM_CARDS + NUM_CARDS) % NUM_CARDS;
+      selectedRef.current = newSelected;
+      setSelectedIdx(newSelected);
+    } : undefined;
 
     if (stateRef.current.progress < 0.75) {
       const section = sectionRef.current;
@@ -320,11 +320,11 @@ export default function TradingSection() {
           updateCardsRef.current();
         },
         onComplete: () => {
-          doCarouselRotate(delta);
+          doCarouselRotate(delta, onRotationComplete);
         },
       });
     } else {
-      doCarouselRotate(delta);
+      doCarouselRotate(delta, onRotationComplete);
     }
   }, [doCarouselRotate]);
 
@@ -349,6 +349,9 @@ export default function TradingSection() {
           <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-[0.9] tracking-tighter text-white whitespace-nowrap">
             TRADING
           </h2>
+          <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-white/50 mt-3 whitespace-nowrap">
+            Scroll to view &amp; click for info
+          </p>
         </div>
 
         <div
