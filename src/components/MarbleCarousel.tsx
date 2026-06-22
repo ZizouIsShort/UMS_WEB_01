@@ -52,6 +52,15 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
     setDims(newDims);
   }, []);
 
+  // Reset scroll + restart animation on category change
+  const prevCategory = useRef(activeCategory);
+  useEffect(() => {
+    if (prevCategory.current !== activeCategory) {
+      prevCategory.current = activeCategory;
+      sectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [activeCategory]);
+
   useEffect(() => {
     const section = sectionRef.current;
     const ring = ringRef.current;
@@ -73,7 +82,7 @@ export default function MarbleCarousel({ id }: MarbleCarouselProps) {
 
     ScrollTrigger.refresh();
     return () => ctx.revert();
-  }, [dims]);
+  }, [dims, activeCategory]);
 
   const ANGLE_STEP = 360 / filteredItems.length;
 
