@@ -129,7 +129,9 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(1);
   const [counts, setCounts] = useState([0, 0]);
   const timersRef = useRef<ReturnType<typeof setInterval>[]>([]);
-  const [selectedProject, setSelectedProject] = useState<SiteImage | null>(null);
+  const [selectedProject, setSelectedProject] = useState<SiteImage | null>(
+    null,
+  );
   const [galleryIdx, setGalleryIdx] = useState(0);
   const aboutRef = useRef<HTMLDivElement>(null);
   const [aboutVisible, setAboutVisible] = useState(false);
@@ -281,7 +283,9 @@ export default function Home() {
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [selectedProject]);
 
   return (
@@ -339,7 +343,9 @@ export default function Home() {
           <div className="absolute top-12 left-6 sm:left-10 z-10 pointer-events-none select-none mix-blend-difference">
             <div className="flex items-center space-x-2 mb-3">
               <span className="w-6 h-[1px] bg-gold-500" />
-              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold-400">Landmark Heritage</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold-400">
+                Landmark Heritage
+              </span>
             </div>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-[0.9] tracking-tighter text-white whitespace-nowrap">
               HERITAGE
@@ -427,15 +433,19 @@ export default function Home() {
         className="relative py-16 sm:py-20 px-6 sm:px-10 bg-black"
       >
         <div
-          className={`max-w-6xl mx-auto transition-all duration-700 ${
-            aboutVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          className={`transition-all duration-700 ${
+            aboutVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
           }`}
         >
           {/* Heading */}
           <div className="mb-8 sm:mb-10">
             <div className="flex items-center space-x-2 mb-3">
               <span className="w-6 h-[1px] bg-gold-500" />
-              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold-400">About</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold-400">
+                About
+              </span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-[0.9] tracking-tighter text-white mb-3">
               Oman&apos;s Architectural
@@ -443,60 +453,27 @@ export default function Home() {
               Cornerstone
             </h2>
             <div className="flex items-center space-x-3">
-              <span className="text-gold-400 text-xs font-mono tracking-[0.15em]">Engineering Grandeur</span>
+              <span className="text-gold-400 text-xs font-mono tracking-[0.15em]">
+                Engineering Grandeur
+              </span>
               <span className="w-px h-3 bg-zinc-600" />
-              <span className="text-zinc-500 text-xs font-mono tracking-[0.15em]">Since 2020</span>
+              <span className="text-zinc-500 text-xs font-mono tracking-[0.15em]">
+                Since 2020
+              </span>
             </div>
           </div>
 
           {/* Description */}
           <div className="max-w-4xl mb-10 sm:mb-14">
             <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
-              Based in the prestigious Azaiba district of Muscat, United Modern Stone SPC provides integrated civil-engineering grade solutions — supply, diamond processing, water-jet carving, wall cladding, and interior flooring systems across Oman. With an elite workforce of over 66 specialist masons, CNC developers, and civil draftsmen, we deliver structural materials that satisfy global health, safety, and acoustic standards with sub-millimeter installation accuracy.
+              Based in the prestigious Azaiba district of Muscat, United Modern
+              Stone SPC provides integrated civil-engineering grade solutions —
+              supply, diamond processing, water-jet carving, wall cladding, and
+              interior flooring systems across Oman. With an elite workforce of
+              over 66 specialist masons, CNC developers, and civil draftsmen, we
+              deliver structural materials that satisfy global health, safety,
+              and acoustic standards with sub-millimeter installation accuracy.
             </p>
-          </div>
-
-          {/* Values Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            <div className="border border-white/5 bg-white/[0.02] rounded-lg p-5 sm:p-6 hover:bg-white/[0.04] transition-colors duration-500">
-              <div className="w-8 h-px bg-gold-500 mb-4" />
-              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-white mb-2">
-                Engineering Excellence
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                Every slab goes through digital vein mapping and sonar inspection interfaces matching architects&apos; blueprints exactly.
-              </p>
-            </div>
-
-            <div className="border border-white/5 bg-white/[0.02] rounded-lg p-5 sm:p-6 hover:bg-white/[0.04] transition-colors duration-500">
-              <div className="w-8 h-px bg-gold-500 mb-4" />
-              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-white mb-2">
-                Absolute Quality Assurance
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                Wet-controlled, climate-guarded cutting rooms avoid trace physical fissures. We guarantee lifetime safety standard controls.
-              </p>
-            </div>
-
-            <div className="border border-white/5 bg-white/[0.02] rounded-lg p-5 sm:p-6 hover:bg-white/[0.04] transition-colors duration-500">
-              <div className="w-8 h-px bg-gold-500 mb-4" />
-              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-white mb-2">
-                Grand Vision
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                To supply timeless materials from Oman&apos;s rich mountain blocks and global quarries to the finest structures of the modern world.
-              </p>
-            </div>
-
-            <div className="border border-white/5 bg-white/[0.02] rounded-lg p-5 sm:p-6 hover:bg-white/[0.04] transition-colors duration-500">
-              <div className="w-8 h-px bg-gold-500 mb-4" />
-              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-white mb-2">
-                Our Mission
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                Integrating physical structural diagnostics, raw diamond sawing precision, and on-site engineering safety parameters to supply reliable architectural facades.
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -510,7 +487,10 @@ export default function Home() {
       {selectedProject && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm"
-          onClick={() => { setSelectedProject(null); setGalleryIdx(0); }}
+          onClick={() => {
+            setSelectedProject(null);
+            setGalleryIdx(0);
+          }}
         >
           <div
             className="relative bg-zinc-900/95 border border-white/10 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
@@ -518,7 +498,10 @@ export default function Home() {
           >
             {/* Close button */}
             <button
-              onClick={() => { setSelectedProject(null); setGalleryIdx(0); }}
+              onClick={() => {
+                setSelectedProject(null);
+                setGalleryIdx(0);
+              }}
               className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-white/60 hover:text-white hover:bg-black/80 transition-colors text-lg leading-none"
             >
               &#x2715;
@@ -528,7 +511,10 @@ export default function Home() {
               {/* Gallery */}
               <div className="md:w-3/5 p-5 sm:p-6">
                 {(() => {
-                  const allImages = [selectedProject.src, ...selectedProject.gallery];
+                  const allImages = [
+                    selectedProject.src,
+                    ...selectedProject.gallery,
+                  ];
                   const displayImage = allImages[galleryIdx];
                   return (
                     <>
@@ -543,24 +529,47 @@ export default function Home() {
                             {/* Left arrow */}
                             <button
                               onClick={() =>
-                                setGalleryIdx((galleryIdx - 1 + allImages.length) % allImages.length)
+                                setGalleryIdx(
+                                  (galleryIdx - 1 + allImages.length) %
+                                    allImages.length,
+                                )
                               }
                               className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-black/50 text-white/80 hover:bg-black/80 hover:text-white transition-colors"
                               aria-label="Previous image"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="w-5 h-5"
+                              >
                                 <path d="M15 18l-6-6 6-6" />
                               </svg>
                             </button>
                             {/* Right arrow */}
                             <button
                               onClick={() =>
-                                setGalleryIdx((galleryIdx + 1) % allImages.length)
+                                setGalleryIdx(
+                                  (galleryIdx + 1) % allImages.length,
+                                )
                               }
                               className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-black/50 text-white/80 hover:bg-black/80 hover:text-white transition-colors"
                               aria-label="Next image"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="w-5 h-5"
+                              >
                                 <path d="M9 18l6-6-6-6" />
                               </svg>
                             </button>
