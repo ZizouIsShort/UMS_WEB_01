@@ -315,10 +315,8 @@ export default function Home() {
           <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-white leading-[0.95] mb-4">
             United Modern Stone
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-zinc-300 font-light tracking-wide max-w-2xl mx-auto">
-            Civil Stone Craftsmen{" "}
-            <span className="text-gold-400 font-medium">&amp;</span> Landmark
-            Elevations
+          <p className="text-lg sm:text-xl md:text-2xl text-zinc-300 font-light tracking-wide max-w-3xl mx-auto">
+            Your trusted <span className="text-gold-400 font-medium">marble, granite &amp; quartz supplier in Muscat, Oman</span> — civil stone craftsmen &amp; landmark elevations
           </p>
         </div>
 
@@ -467,9 +465,10 @@ export default function Home() {
           <div className="max-w-4xl mb-10 sm:mb-14">
             <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
               Based in the prestigious Azaiba district of Muscat, United Modern
-              Stone SPC provides integrated civil-engineering grade solutions —
+              Stone SPC is a premier <strong>marble supplier in Muscat</strong> and across Oman, providing integrated civil-engineering grade solutions —
               supply, diamond processing, water-jet carving, wall cladding, and
-              interior flooring systems across Oman. With an elite workforce of
+              interior flooring systems across the Sultanate. As a leading <strong>granite supplier in Oman</strong> and <strong>quartz supplier in Muscat</strong>,
+              we source, process and install premium natural stone for hospitality, commercial and royal projects. With an elite workforce of
               over 66 specialist masons, CNC developers, and civil draftsmen, we
               deliver structural materials that satisfy global health, safety,
               and acoustic standards with sub-millimeter installation accuracy.
