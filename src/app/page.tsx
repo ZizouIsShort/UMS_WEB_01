@@ -202,30 +202,25 @@ export default function Home() {
     let totalScroll = track.scrollWidth - window.innerWidth;
     if (totalScroll <= 0) return;
 
-    // Let content height (100vh from sticky div) determine section height — no inline override
-    const endStr = () => `+=${totalScroll}`;
+    // Set section height so sticky div stays pinned for the full scroll range
+    section.style.height = `${totalScroll + window.innerHeight}px`;
 
-    const tl = gsap.timeline({
+    const endStr = `+=${totalScroll}`;
+
+    // Horizontal track scroll (CSS position: sticky handles vertical pinning)
+    gsap.to(track, {
+      x: -totalScroll,
+      ease: "none",
       scrollTrigger: {
         trigger: section,
-        pin: true,
         start: "top top",
         end: endStr,
         scrub: isMobile ? 0.5 : 1,
         invalidateOnRefresh: true,
       },
-      onUpdate: () => {
-        const prog = tl.progress();
-        const idx = Math.min(
-          siteImages.length - 1,
-          Math.floor(prog * siteImages.length),
-        );
-        setActiveIndex(idx + 1);
-      },
     });
 
-    tl.to(track, { x: -totalScroll, ease: "none" });
-
+    // Parallax
     panels.forEach((panel) => {
       const speed = parseFloat(panel.dataset.speed || "1");
       const parallaxAmount = isMobile ? 0 : (1 - speed) * totalScroll;
@@ -245,7 +240,6 @@ export default function Home() {
     ScrollTrigger.refresh();
 
     return () => {
-      tl.kill();
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
@@ -335,7 +329,7 @@ export default function Home() {
       <section
         id="projects"
         ref={sectionRef}
-        className="relative overflow-hidden bg-black"
+        className="relative bg-black"
       >
         <div className="sticky top-0 h-screen overflow-hidden">
           <div className="absolute top-12 left-6 sm:left-10 z-10 pointer-events-none select-none mix-blend-difference">
